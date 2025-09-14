@@ -11,3 +11,14 @@ coverage/
 .vscode/*.log
 turbo/
 .turbo/
+.env.*
+.envrc
+*.pem
+*.p12
+*.key
+*.crt
+*.env.*
+frontend/.env
+frontend/.env.*
+backend/.env
+backend/.env.*

@@ -7,25 +7,50 @@ import LangToggle from '@/components/LangToggle';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { useI18n } from '@/i18n/I18nProvider';
+import { supabaseBrowser } from '@/lib/supabase/client';
+
+// ✅ Utilidad para extraer mensajes de error sin usar `any`
+function getErrorMessage(err: unknown, fallback = 'No pudimos iniciar sesión.'): string {
+  if (err instanceof Error) return err.message;
+  if (typeof err === 'object' && err !== null && 'message' in err) {
+    const m = (err as { message?: unknown }).message;
+    if (typeof m === 'string') return m;
+  }
+  return fallback;
+}
 
 export default function LoginPage() {
   const { t } = useI18n();
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const onSubmit = async (e: React.FormEvent) => {
+  // ✅ Tipamos el retorno y evitamos `any`
+  const signInGoogle = async (): Promise<void> => {
+    const supabase = supabaseBrowser();
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: 'http://localhost:3000/auth/callback' },
+    });
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setErr(null);
-    if (!email || !password) return setErr('Completa tus credenciales.');
+    if (!email || !password) {
+      setErr('Completa tus credenciales.');
+      return;
+    }
     setLoading(true);
     try {
-      await new Promise((r) => setTimeout(r, 800));
+      const supabase = supabaseBrowser();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
       router.push('/hives');
-    } catch {
-      setErr('No pudimos iniciar sesión.');
+    } catch (err: unknown) {
+      setErr(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -33,7 +58,7 @@ export default function LoginPage() {
 
   return (
     <CardShell
-      heroSrc={null} /* SIN imagen */
+      heroSrc={null} // SIN imagen
       headerLeft={
         <div className="flex items-center gap-2">
           <Image
@@ -58,14 +83,14 @@ export default function LoginPage() {
             placeholder={t('login.email')}
             autoComplete="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} // ✅ tipado
           />
           <Input
             type="password"
             placeholder={t('login.password')}
             autoComplete="current-password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} // ✅ tipado
           />
           {err && <p className="text-sm text-red-400">{err}</p>}
           <Button type="submit" size="lg" className="w-full rounded-2xl h-12" disabled={loading}>
@@ -87,6 +112,9 @@ export default function LoginPage() {
             {t('login.guest')}
           </button>
         </p>
+
+        {/* (Opcional) Botón Google si lo quieres visible */}
+        {/* <Button variant="secondary" className="mt-4 w-full" onClick={signInGoogle}>Google</Button> */}
 
         <p className="mt-8 text-center text-xs text-neutral-500">
           <span className="text-neutral-400">{t('common.poweredBy')} </span>

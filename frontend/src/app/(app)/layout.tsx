@@ -1,9 +1,17 @@
+import { supabaseServer } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import '../globals.css';
 import NavTab from '@/components/NavTab';
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await supabaseServer();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) redirect('/login');
   return (
     <div className="min-h-dvh pb-20">
-      <main className="mx-auto max-w-screen-md px-4 py-6">{children}</main>
+      {children}
       <NavTab />
     </div>
   );
