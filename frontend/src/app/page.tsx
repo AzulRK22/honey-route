@@ -1,14 +1,4 @@
-import Link from 'next/link';
+import { redirect } from 'next/navigation';
 export default function Home() {
-  return (
-    <main className="p-4">
-      <h1 className="text-xl font-bold">HoneyRoute</h1>
-      <p className="mt-2">
-        Ir a{' '}
-        <Link className="underline" href="/hives">
-          Hives
-        </Link>
-      </p>
-    </main>
-  );
+  redirect('/onboarding');
 }
