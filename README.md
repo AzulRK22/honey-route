@@ -156,32 +156,25 @@ Backend
 • Agrega más módulos con pnpm nest g module <name>.
 
 ⸻
+## Autenticación con Supabase
 
-11. Solución de problemas
-    • zsh: no matches found al crear rutas con (app) o [jobId]:
-    → Pon comillas en la ruta:
-    cat > 'frontend/src/app/(app)/layout.tsx' <<'TSX'
-    • Next: “Missing <html>/<body> in root layout”
-    → Asegúrate que frontend/src/app/layout.tsx envuelva con:
-    export default function RootLayout({ children }:{children:React.ReactNode}) {
-    return (<html lang="en"><body>{children}</body></html>);
-    }
-    • Tailwind “Unknown at rule @tailwind / @apply” en VS Code
-    → Son avisos del editor. Añade en .vscode/settings.json:
-    { "css.lint.unknownAtRules": "ignore" }.
-    • Error Tailwind v4 (“@tailwindcss/postcss”)
-    → Estamos en Tailwind v3. Reinstala:
-    pnpm --filter frontend add -D tailwindcss@3 postcss autoprefixer
-    y en postcss.config.js:
-    module.exports = { plugins: { tailwindcss: {}, autoprefixer: {} } };
-    • Turbo 2.x “pipeline → tasks”
-    → turbo.json ya usa "tasks". Si ves el error, reinstala desde repo.
-    • pnpm: “workspaces no soportado”
-    → Asegúrate de tener pnpm-workspace.yaml en la raíz.
-    • No tengo Docker
-    → No es obligatorio para el mock. Solo levanta el backend con pnpm --filter backend dev.
+Esta app usa [Supabase Auth](https://supabase.com/) para login con email/contraseña y OAuth.  
+Mantuvimos diseño **mobile-first** y la **altura unificada** del shell.
 
-⸻ 12) Licencia y conducta
+### 1) Variables de entorno (Frontend)
+
+1) Crea `frontend/.env.local` con tus valores del proyecto:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://TU-PROYECTO.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=TU_ANON_KEY
+```
+Asegúrate de que los .env* están ignorados en .gitignore (ya configurado en el repo).
+2) Dependencias
+  pnpm --filter frontend add @supabase/supabase-js @supabase/ssr
+
+⸻ 
+12) Licencia y conducta
 • MIT (ver LICENSE)
 • Código de Conducta en CODE_OF_CONDUCT.md
 • Contribución: ver CONTRIBUTING.md
