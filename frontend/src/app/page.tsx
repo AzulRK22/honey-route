@@ -1,8 +1,9 @@
+// frontend/src/app/app.tsx
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { supabaseServer } from '@/lib/supabase/server';
 
 export default async function RootGate() {
-  const supabase = await createClient(); // <-- await
+  const supabase = await supabaseServer();
 
   const {
     data: { session },

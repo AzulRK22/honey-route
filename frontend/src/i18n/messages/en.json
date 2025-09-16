@@ -49,5 +49,21 @@
   "auth": {
     "notAuthenticated": "You need to sign in.",
     "forbidden": "You don’t have access."
+  },
+  "home": {
+    "title": "My Apiaries",
+    "capture": "Capture / Analyze",
+    "hivesCount": "{{count}} hives",
+    "status": {
+      "healthy": "Healthy",
+      "attention": "Needs Attention",
+      "critical": "Critical"
+    },
+    "nav": {
+      "home": "Home",
+      "alerts": "Alerts",
+      "map": "Map",
+      "settings": "Settings"
+    }
   }
 }

@@ -48,5 +48,21 @@
   "auth": {
     "notAuthenticated": "Necesitas iniciar sesión.",
     "forbidden": "No tienes acceso."
+  },
+  "home": {
+    "title": "Mis apiarios",
+    "capture": "Capturar / Analizar",
+    "hivesCount": "{{count}} colmenas",
+    "status": {
+      "healthy": "Saludable",
+      "attention": "Requiere atención",
+      "critical": "Crítico"
+    },
+    "nav": {
+      "home": "Inicio",
+      "alerts": "Alertas",
+      "map": "Mapa",
+      "settings": "Ajustes"
+    }
   }
 }
