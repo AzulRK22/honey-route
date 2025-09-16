@@ -50,7 +50,7 @@ Note: We pinned Tailwind v3 for stability. (If someone installs v4 you’ll get 
    • Docker Desktop (only if you’ll use local Postgres/Redis):
    brew install --cask docker
 
-3)  Repository structure
+ 3. Repository structure
     honey-route/
     ├─ frontend/            # Next.js (App Router)
     ├─ backend/             # NestJS
@@ -65,7 +65,7 @@ Note: We pinned Tailwind v3 for stability. (If someone installs v4 you’ll get 
     ├─ .husky/              # pre-commit, commit-msg
     ├─ .prettierrc, .editorconfig, .gitignore, commitlint.config.cjs
     └─ README.md
-4)  Installation & startup
+ 4. Installation & startup
     1. Install dependencies
        pnpm install
     2. Generate projects (if not yet created)
@@ -84,7 +84,7 @@ Note: We pinned Tailwind v3 for stability. (If someone installs v4 you’ll get 
          pnpm --filter frontend dev
          pnpm --filter backend dev
 
-5)  Scripts
+# 6)  Scripts
 
 Root
 • pnpm dev → runs frontend + backend in parallel (Turbo).
@@ -102,7 +102,7 @@ Backend
 • POST /analysis → { jobId }
 • GET /analysis/:jobId → { status: "done", riskLevel: "medium" }
 
-6) Environment variables
+# 7) Environment variables
    frontend/.env.local
    NEXT_PUBLIC_API_URL=http://localhost:3001
    NEXT_PUBLIC_APP_NAME=HoneyRoute
@@ -117,7 +117,7 @@ Backend
    S3_SECRET_ACCESS_KEY=
    For CI/Prod, configure Secrets in GitHub (Settings → Secrets and variables → Actions).
 
-7)  Branch flow & collaboration
+# 8)  Branch flow & collaboration
    • main: protected, stable (only approved PRs).
    • develop: feature integration.
    • features: feat/<área>-<slug> (p. ej. feat/ui-tabbar), fixes: fix/<área>-<slug>.
@@ -137,7 +137,7 @@ Checklist before to open PR:
 
 ⸻
 
-8)  Code style & VS Code
+# 9)  Code style & VS Code
    • Prettier + ESLint (Husky runs lint-staged on pre-commit).
    • Recommended to install extensions:
    • Tailwind CSS IntelliSense
@@ -146,7 +146,7 @@ Checklist before to open PR:
    • .vscode/settings.json (optional) can ignore @tailwind/@apply warnings:
    { "css.lint.unknownAtRules": "ignore", "files.associations": {"\*.css":"tailwindcss"} }
    
-9)  Feature development (example)
+# 10)  Feature development (example)
 
 Frontend
 • Base pages:: /hives, /capture, /analysis/[jobId], /alerts, /settings, /history/[hiveId], /map.
@@ -177,13 +177,13 @@ Make sure .env* files are ignored in .gitignore (already configured).
   pnpm --filter frontend add @supabase/supabase-js @supabase/ssr
 
 ⸻ 
-12) License & conduct
+3) License & conduct
 • MIT(see LICENSE)
 • Code of Conduct in CODE_OF_CONDUCT.md
 • Contribution guidelines in CONTRIBUTING.md
 
 ⸻
 
-13. Contact
+ 4) Contact
     • Initial maintainer: @azulrk
     • Issues and PRs in this repo.
