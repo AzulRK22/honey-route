@@ -4,19 +4,19 @@ export interface ApiaryInput {
   name: string;
   location?: string;
 }
-export interface ApiaryRow extends ApiaryInput {
+export interface ApiaryRecord extends ApiaryInput {
   id: string;
   owner_id: string;
   created_at: string;
   updated_at: string;
 }
 
-export async function createApiary(input: ApiaryInput): Promise<ApiaryRow> {
+export async function createApiary(input: ApiaryInput): Promise<ApiaryRecord> {
   const supabase = supabaseBrowser();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) throw new Error('Sesión inválida.');
+  if (!user) throw new Error('auth/no-session');
 
   const { data, error } = await supabase
     .from('apiaries')
@@ -24,6 +24,6 @@ export async function createApiary(input: ApiaryInput): Promise<ApiaryRow> {
     .select()
     .single();
 
-  if (error) throw error;
-  return data as ApiaryRow;
+  if (error) throw new Error('apiaries/insert-failed');
+  return data as ApiaryRecord;
 }
