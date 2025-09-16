@@ -2,106 +2,107 @@
 
 HoneyRoute serves smallholder beekeepers and cooperative administrators. It provides photo-based pest/disease detection (e.g., Varroa risk), alerting, recommendations, action logging, and basic mapping. Future phases include floral resource maps and predictive risk zones. The system will be branded as “HoneyRoute — Powered by EcoVentus.”
 
-Monorepo con frontend (Next.js) y backend (NestJS) para el MVP de HoneyRoute. Usa PNPM workspaces, Turborepo, Husky y Commitlint para una colaboración ordenada.
+Monorepo with frontend (Next.js) and backend (NestJS) for the HoneyRoute MVP. Uses PNPM workspaces, Turborepo, Husky, and Commitlint for organized collaboration.
 
-TL;DR (5 pasos)
+TL;DR (5 steps)
 
-# 0) Requisitos: Node 20, pnpm 9, Git. (Docker opcional)
+# 0) Requirements: Node 20, pnpm 9, Git. (Docker optional)
 
 corepack disable && npm i -g pnpm@9.7.0
 
-# 1) Instalar
+# 1) Install
 
 pnpm install
 
-# 2) Generar scaffolds (si es la primera vez)
+# 2) Generate scaffolds (if first time)
 
 pnpm bootstrap
 
-# 3) Variables de entorno
+# 3) Environment variables
 
 cp frontend/.env.example frontend/.env.local
 cp backend/.env.example backend/.env
 
-# 4) (Opcional) Servicios locales
+# 4) (Optional) Local services
 
 # brew install --cask docker && open -a Docker
 
 docker compose up -d
 
-# 5) Desarrollo en paralelo
+# 5) Parallel development
 
 pnpm dev
 
 1. Stack
    • Frontend: Next.js (App Router), TypeScript, Tailwind v3, PostCSS, autoprefixer.
-   • Backend: NestJS (TypeScript), (mock /analysis incluido).
-   • Herramientas: PNPM workspaces, Turborepo, Husky + lint-staged, Commitlint, Prettier.
-   • CI: GitHub Actions separadas por paquete (frontend/** y backend/**).
+   • Backend: NestJS (TypeScript), (mock /analysis included).
+   • Tooling: PNPM workspaces, Turborepo, Husky + lint-staged, Commitlint, Prettier.
+   • CI: GitHub Actions separated per package (frontend/** and backend/**).
 
-Nota: fijamos Tailwind v3 por estabilidad. (Si alguien instala v4 saldrá un error con el plugin PostCSS; ver “Solución de problemas”.)
+Note: We pinned Tailwind v3 for stability. (If someone installs v4 you’ll get an error with the PostCSS plugin; see “Troubleshooting.”)
 
-2. Requisitos
-   • Node.js 20 (ideal con nvm)
+2. Requirements
+   • Node.js 20 (ideally with nvm)
    echo "20" > .nvmrc && nvm use
    • pnpm 9.x
    corepack disable && npm i -g pnpm@9.7.0
    • Git y VS Code (recomendado).
-   • Docker Desktop (solo si usarás Postgres/Redis locales): brew install --cask docker.
+   • Docker Desktop (only if you’ll use local Postgres/Redis):
+   brew install --cask docker
 
-3)  Estructura del repositorio
+3)  Repository structure
     honey-route/
-    ├─ frontend/ # Next.js (App Router)
-    ├─ backend/ # NestJS
-    ├─ docs/ # Arquitectura, contrato de API, ADRs
+    ├─ frontend/            # Next.js (App Router)
+    ├─ backend/             # NestJS
+    ├─ docs/                # Architecture, API contract, ADRs
     ├─ .github/
-    │ ├─ workflows/ # ci-frontend.yml, ci-backend.yml
-    │ └─ ISSUE_TEMPLATE/ # bug/feature templates
-    ├─ scripts/bootstrap.sh # genera front y back (scaffolds)
-    ├─ docker-compose.yml # Postgres + Redis (opcional)
+    │  ├─ workflows/        # ci-frontend.yml, ci-backend.yml
+    │  └─ ISSUE_TEMPLATE/   # bug/feature templates
+    ├─ scripts/bootstrap.sh # generates front and back scaffolds
+    ├─ docker-compose.yml   # Postgres + Redis (optional)
     ├─ pnpm-workspace.yaml
-    ├─ turbo.json # Turborepo tasks
-    ├─ .husky/ # pre-commit, commit-msg
+    ├─ turbo.json           # Turborepo tasks
+    ├─ .husky/              # pre-commit, commit-msg
     ├─ .prettierrc, .editorconfig, .gitignore, commitlint.config.cjs
     └─ README.md
-4)  Instalación y arranque
-    1. Instala dependencias
+4)  Installation & startup
+    1. Install dependencies
        pnpm install
-    2. Genera proyectos (si aún no existen)
+    2. Generate projects (if not yet created)
        pnpm bootstrap
-    3. Variables de entorno
+    3. Environment variables
        cp frontend/.env.example frontend/.env.local
        cp backend/.env.example backend/.env
-    4. (Opcional) Levanta servicios locales
+    4. (Optional) Start local services
        docker compose up -d
-    5. Desarrollo
+    5. Development
 
-    # Front + Back con Turbo
+    # Front + Back with Turbo
 
          pnpm dev
-         # O por paquete
+         # Or per package:
          pnpm --filter frontend dev
          pnpm --filter backend dev
 
 5)  Scripts
 
-Raíz
-• pnpm dev → corre frontend y backend en paralelo (Turbo).
-• pnpm build / pnpm lint / pnpm test → ejecutan por paquete.
-• pnpm bootstrap → crea scaffolds de Next/Nest.
-• pnpm prepare → instala Husky (hooks git).
+Root
+• pnpm dev → runs frontend + backend in parallel (Turbo).
+• pnpm build / pnpm lint / pnpm test → run per package.
+• pnpm bootstrap → creates Next/Nest scaffolds.
+• pnpm prepare → installs Husky (git hooks).
 
 Frontend
-• pnpm --filter frontend dev → Next dev en http://localhost:3000.
-• pnpm --filter frontend build → build de producción.
+• pnpm --filter frontend dev → Next dev on http://localhost:3000.
+• pnpm --filter frontend build → production build.
 
 Backend
-• pnpm --filter backend dev → Nest dev en http://localhost:3001 (con CORS).
-• Endpoints mock:
+• pnpm --filter backend dev → Nest dev on http://localhost:3001 (with CORS).
+• Mock endpoints:
 • POST /analysis → { jobId }
 • GET /analysis/:jobId → { status: "done", riskLevel: "medium" }
 
-6. Variables de entorno
+6) Environment variables
    frontend/.env.local
    NEXT_PUBLIC_API_URL=http://localhost:3001
    NEXT_PUBLIC_APP_NAME=HoneyRoute
@@ -114,73 +115,75 @@ Backend
    S3_BUCKET=
    S3_ACCESS_KEY_ID=
    S3_SECRET_ACCESS_KEY=
-   Para CI/Prod, configura Secrets en GitHub (Settings → Secrets and variables → Actions).
+   For CI/Prod, configure Secrets in GitHub (Settings → Secrets and variables → Actions).
 
-7) Flujo de ramas y colaboración
-   • main: protegida, estable (solo PRs aprobados).
-   • develop: integración de features.
+7)  Branch flow & collaboration
+   • main: protected, stable (only approved PRs).
+   • develop: feature integration.
    • features: feat/<área>-<slug> (p. ej. feat/ui-tabbar), fixes: fix/<área>-<slug>.
 
-Convenciones:
+Conventions:
 • Commits: Conventional Commits (feat:, fix:, chore:, docs:, refactor:, test:).
-• PRs: usa el template; agrega screenshots; asegúrate de que CI pase.
-• Merge: Squash & Merge a develop. De develop a main bajo release/tag (cuando corresponda).
+• PRs: use template; add screenshots; ensure CI passes.
+• Merge: Squash & Merge into develop. From develop → main under release/tag (when applicable).
 
-Checklist antes de abrir PR:
-• pnpm lint y pnpm build OK.
-• Focus visible/accesibilidad básica (teclas Tab).
-• Actualiza docs si aplica. 8) CI
-• CI Frontend: se ejecuta en cambios bajo frontend/**.
-• CI Backend: se ejecuta en cambios bajo backend/**.
-• Revisa .github/workflows/\*.yml. Los jobs hacen: install → lint/test (best-effort) → build.
+Checklist before to open PR:
+• pnpm lint and pnpm build OK.
+• Visible focus / basic accessibility (Tab keys).
+• Update docs if applicable.
+• CI Frontend runs on changes under frontend/**.
+• CI Backend runs on changes under backend/**.
+• See .github/workflows/*.yml. Jobs run: install → lint/test (best-effort) → build.
 
 ⸻
 
-9. Estilo de código y VS Code
-   • Prettier + ESLint (Husky ejecuta lint-staged en pre-commit).
-   • Recomendado instalar extensiones:
+8)  Code style & VS Code
+   • Prettier + ESLint (Husky runs lint-staged on pre-commit).
+   • Recommended to install extensions:
    • Tailwind CSS IntelliSense
    • ESLint
    • Prettier
-   • .vscode/settings.json (opcional) puede ignorar avisos de @tailwind/@apply:
+   • .vscode/settings.json (optional) can ignore @tailwind/@apply warnings:
    { "css.lint.unknownAtRules": "ignore", "files.associations": {"\*.css":"tailwindcss"} }
-10. Desarrollo de features (ejemplo)
+   
+9)  Feature development (example)
 
 Frontend
-• Páginas base: /hives, /capture, /analysis/[jobId], /alerts, /settings, /history/[hiveId], /map.
-• Shell móvil: layout (app) con NavTab fija.
-• UI mínima: Button, Card, EmptyState.
+• Base pages:: /hives, /capture, /analysis/[jobId], /alerts, /settings, /history/[hiveId], /map.
+• Mobile shell: layout (app) con NavTab fija.
+• Minimal UI: Button, Card, EmptyState.
 
 Backend
-• Mock listo para /analysis.
-• Agrega más módulos con pnpm nest g module <name>.
+• Mock ready for /analysis.
+• AAdd more modules with:
 
 ⸻
-## Autenticación con Supabase
+## Authentication with Supabase
 
-Esta app usa [Supabase Auth](https://supabase.com/) para login con email/contraseña y OAuth.  
-Mantuvimos diseño **mobile-first** y la **altura unificada** del shell.
+This app uses [Supabase Auth](https://supabase.com/) for email/password and OAuth login.
+We kept a **mobile-first** and the **unified shell heigh*.
 
-### 1) Variables de entorno (Frontend)
+### 1) Environment variable (Frontend)
 
-1) Crea `frontend/.env.local` con tus valores del proyecto:
+1) Create `frontend/.env.local` with your project values:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://TU-PROYECTO.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=TU_ANON_KEY
 ```
-Asegúrate de que los .env* están ignorados en .gitignore (ya configurado en el repo).
-2) Dependencias
+Make sure .env* files are ignored in .gitignore (already configured).
+
+2) Dependencies
   pnpm --filter frontend add @supabase/supabase-js @supabase/ssr
 
 ⸻ 
-12) Licencia y conducta
-• MIT (ver LICENSE)
-• Código de Conducta en CODE_OF_CONDUCT.md
-• Contribución: ver CONTRIBUTING.md
+12) License & conduct
+• MIT(see LICENSE)
+• Code of Conduct in CODE_OF_CONDUCT.md
+• Contribution guidelines in CONTRIBUTING.md
 
 ⸻
 
-13. Contacto
-    • Maintainer inicial: @azulrk
-    • Issues y PRs en este repo.
+13. Contact
+    • Initial maintainer: @azulrk
+    • Issues and PRs in this repo.
