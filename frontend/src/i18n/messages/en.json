@@ -52,7 +52,11 @@
   },
   "settings": {
     "title": "Settings",
-    "sections": { "account": "Account", "preferences": "Preferences", "theme": "Theme" },
+    "sections": {
+      "account": "Account",
+      "preferences": "Preferences",
+      "theme": "Theme"
+    },
     "profile": "Profile",
     "profileHint": "Manage your profile",
     "units": "Units",
@@ -84,5 +88,13 @@
       "map": "Map",
       "settings": "Settings"
     }
+  },
+  "map": {
+    "title": "Map",
+    "searchPh": "Search hives or locations",
+    "comingSoon": "Floral maps & risk zones coming in next versions",
+    "locate": "Locate me",
+    "noGeo": "Geolocation not available",
+    "geoDenied": "Permission denied"
   }
 }

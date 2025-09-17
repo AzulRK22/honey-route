@@ -1,8 +1,13 @@
-export default function MapPage() {
-  return (
-    <main className="p-4">
-      <h1 className="text-xl font-bold">Map</h1>
-      <p>Próximamente</p>
-    </main>
-  );
+import { redirect } from 'next/navigation';
+import { supabaseServer } from '@/lib/supabase/server';
+import MapClient from './MapClient';
+
+export default async function MapPage() {
+  const supabase = await supabaseServer();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) redirect('/login');
+
+  return <MapClient />;
 }
