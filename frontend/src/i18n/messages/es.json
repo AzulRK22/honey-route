@@ -42,13 +42,21 @@
   },
   "common": {
     "back": "Atrás",
-    "other": "Other",
     "poweredBy": "Con tecnología de",
+    "other": "Otros",
     "genericError": "Algo salió mal."
+  },
+  "auth": {
+    "notAuthenticated": "Necesitas iniciar sesión.",
+    "forbidden": "No tienes acceso."
   },
   "settings": {
     "title": "Ajustes",
-    "sections": { "account": "Cuenta", "preferences": "Preferencias", "theme": "Tema" },
+    "sections": {
+      "account": "Cuenta",
+      "preferences": "Preferencias",
+      "theme": "Tema"
+    },
     "profile": "Perfil",
     "profileHint": "Gestiona tu perfil",
     "units": "Unidades",
@@ -65,10 +73,6 @@
     "es": "ES",
     "signOut": "Cerrar sesión"
   },
-  "auth": {
-    "notAuthenticated": "Necesitas iniciar sesión.",
-    "forbidden": "No tienes acceso."
-  },
   "home": {
     "title": "Mis apiarios",
     "capture": "Capturar / Analizar",
@@ -84,5 +88,13 @@
       "map": "Mapa",
       "settings": "Ajustes"
     }
+  },
+  "map": {
+    "title": "Mapa",
+    "searchPh": "Buscar colmenas o lugares",
+    "comingSoon": "Mapas florales y zonas de riesgo en próximas versiones",
+    "locate": "Mi ubicación",
+    "noGeo": "Geolocalización no disponible",
+    "geoDenied": "Permiso denegado"
   }
 }
