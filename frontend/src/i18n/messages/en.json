@@ -52,7 +52,12 @@
   },
   "settings": {
     "title": "Settings",
-    "sections": { "account": "Account", "preferences": "Preferences", "theme": "Theme" },
+    "sections": {
+      "account": "Account",
+      "preferences": "Preferences",
+      "theme": "Theme",
+      "support": "Support & Legal"
+    },
     "profile": "Profile",
     "profileHint": "Manage your profile",
     "units": "Units",
@@ -185,5 +190,58 @@
       "queen": "Queen introduction completed.",
       "pest": "OA vaporization."
     }
+  },
+  "help": {
+    "title": "Help & FAQ",
+    "subtitle": "Common questions and quick answers.",
+    "more": "Still need help? Contact our support team.",
+    "contact": "Contact Support",
+    "faq": {
+      "q1": "How do I add a new apiary?",
+      "a1": "Go to Home → New Apiary and fill in the details.",
+      "q2": "How do I monitor hive health?",
+      "a2": "Capture images in the Camera screen and review the analysis.",
+      "q3": "How do I export data?",
+      "a3": "From History, use the export option (coming soon).",
+      "q4": "How do I switch to the dark theme?",
+      "a4": "Settings → Theme → enable Dark Mode."
+    }
+  },
+  "terms": {
+    "title": "Terms & Privacy",
+    "updated": "Last updated: today",
+    "s1": {
+      "h": "1. Acceptance of Terms",
+      "p": "By using HoneyRoute you agree to these Terms and our Privacy Policy."
+    },
+    "s2": {
+      "h": "2. Description of Service",
+      "p": "HoneyRoute helps manage apiaries and provides monitoring tools."
+    },
+    "s3": {
+      "h": "3. User Accounts",
+      "p": "Keep your account secure and notify us of any unauthorized use."
+    },
+    "s4": {
+      "h": "4. Privacy",
+      "p": "We collect and process data as described in our Privacy Policy."
+    },
+    "s5": { "h": "5. Changes", "p": "We may update these terms; continued use means acceptance." }
+  },
+  "notifications": {
+    "menu": "Notifications",
+    "menuHint": "Choose what to receive",
+    "title": "Notifications",
+    "subtitle": "Stay informed about your apiary.",
+    "inapp": "In-App Notifications",
+    "push": "Push Notifications",
+    "critical": { "t": "Critical Alerts", "d": "Health or risk events that need attention." },
+    "routine": { "t": "Routine Reminders", "d": "Maintenance and periodic tasks." },
+    "updates": { "t": "App Updates", "d": "News and improvements." },
+    "urgent": { "t": "Urgent Alerts", "d": "Immediate alerts to your device." },
+    "general": { "t": "General Notifications", "d": "Regular updates and tips." },
+    "enable": "Grant push permission",
+    "notSupported": "Push notifications are not supported on this device/browser.",
+    "denied": "Permission was not granted."
   }
 }

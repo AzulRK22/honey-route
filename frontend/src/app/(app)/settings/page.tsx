@@ -1,14 +1,38 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+
 import { supabaseBrowser } from '@/lib/supabase/client';
 import CardShell from '@/components/shell/CardShell';
 import BrandMark from '@/components/BrandMark';
 import Button from '@/components/ui/Button';
 import NavTab from '@/components/NavTab';
 import { useI18n } from '@/i18n/I18nProvider';
+
+/* ---------- small icon helper ---------- */
+function Icon({
+  name,
+  alt = '',
+  size = 22,
+}: {
+  name: 'profile' | 'rule' | 'sync' | 'privacy' | 'lang' | 'moon' | 'help' | 'bell';
+  alt?: string;
+  size?: number;
+}) {
+  return (
+    <Image
+      src={`/images/${name}.png`}
+      alt={alt}
+      width={size}
+      height={size}
+      className="block"
+      priority={false}
+    />
+  );
+}
 
 /* ---------- utils ---------- */
 function useLocalStorage<T>(key: string, initial: T) {
@@ -40,9 +64,8 @@ function Row({
 }) {
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-neutral-900 px-4 py-3 ring-1 ring-black/5">
-      <div className="grid h-10 w-10 place-items-center rounded-full bg-neutral-800 text-amber-400">
-        {leading}
-      </div>
+      {/* sin círculo; respetamos color original del ícono */}
+      <div className="shrink-0">{leading}</div>
       <div className="min-w-0 flex-1">
         <p className="truncate font-semibold">{title}</p>
         {subtitle ? <p className="truncate text-sm text-neutral-400">{subtitle}</p> : null}
@@ -56,11 +79,15 @@ function Switch({ checked, onChange }: { checked: boolean; onChange: (v: boolean
   return (
     <button
       onClick={() => onChange(!checked)}
-      className={`h-6 w-11 rounded-full p-0.5 transition ${checked ? 'bg-amber-400' : 'bg-neutral-700'}`}
+      className={`h-6 w-11 rounded-full p-0.5 transition ${
+        checked ? 'bg-amber-400' : 'bg-neutral-700'
+      }`}
       aria-pressed={checked}
     >
       <span
-        className={`block h-5 w-5 rounded-full bg-white transition ${checked ? 'translate-x-5' : 'translate-x-0'}`}
+        className={`block h-5 w-5 rounded-full bg-white transition ${
+          checked ? 'translate-x-5' : 'translate-x-0'
+        }`}
       />
     </button>
   );
@@ -73,14 +100,18 @@ function SegmentedLang() {
     <div className="inline-flex rounded-full bg-neutral-800 p-1">
       <button
         onClick={() => setLocale('en')}
-        className={`px-3 py-1 rounded-full text-sm ${isEN ? 'bg-amber-400 text-black font-semibold' : 'text-neutral-300'}`}
+        className={`px-3 py-1 rounded-full text-sm ${
+          isEN ? 'bg-amber-400 text-black font-semibold' : 'text-neutral-300'
+        }`}
         aria-pressed={isEN}
       >
         {t('settings.en')}
       </button>
       <button
         onClick={() => setLocale('es')}
-        className={`px-3 py-1 rounded-full text-sm ${!isEN ? 'bg-amber-400 text-black font-semibold' : 'text-neutral-300'}`}
+        className={`px-3 py-1 rounded-full text-sm ${
+          !isEN ? 'bg-amber-400 text-black font-semibold' : 'text-neutral-300'
+        }`}
         aria-pressed={!isEN}
       >
         {t('settings.es')}
@@ -113,7 +144,6 @@ export default function SettingsPage() {
     <CardShell
       heroSrc={null}
       headerLeft={<BrandMark />}
-      // ya no hace falta trucar padding-bottom: el grid separa el footer
       contentClassName=""
       footer={<NavTab active="settings" />}
     >
@@ -126,7 +156,7 @@ export default function SettingsPage() {
       <div className="space-y-3">
         <Link href="/profile" className="no-underline">
           <Row
-            leading={<span>👤</span>}
+            leading={<Icon name="profile" />}
             title={t('settings.profile')}
             subtitle={t('settings.profileHint')}
           />
@@ -140,33 +170,56 @@ export default function SettingsPage() {
       <div className="space-y-3">
         <Link href="/settings/units" className="no-underline">
           <Row
-            leading={<span>📏</span>}
+            leading={<Icon name="rule" />}
             title={t('settings.units')}
             subtitle={t('settings.unitsHint')}
           />
         </Link>
 
         <Row
-          leading={<span>🔄</span>}
+          leading={<Icon name="sync" />}
           title={t('settings.offline')}
           subtitle={t('settings.offlineHint')}
           trailing={<Switch checked={offline} onChange={setOffline} />}
         />
 
-        <Link href="/settings/privacy" className="no-underline">
+        {/* Privacy (Terms & Privacy) */}
+        <Link href="/settings/terms" className="no-underline">
           <Row
-            leading={<span>🛡️</span>}
+            leading={<Icon name="privacy" />}
             title={t('settings.privacy')}
             subtitle={t('settings.privacyHint')}
           />
         </Link>
 
+        {/* Language */}
         <Row
-          leading={<span>🌐</span>}
+          leading={<Icon name="lang" />}
           title={t('settings.language')}
           subtitle={t('settings.languageHint')}
           trailing={<SegmentedLang />}
         />
+      </div>
+
+      {/* Support & Legal */}
+      <h2 className="mt-6 mb-2 text-neutral-400 text-sm font-semibold tracking-wide">
+        {t('settings.sections.support')}
+      </h2>
+      <div className="space-y-3">
+        <Link href="/settings/help" className="no-underline">
+          <Row
+            leading={<Icon name="help" />}
+            title={t('help.title')}
+            subtitle={t('help.subtitle')}
+          />
+        </Link>
+        <Link href="/settings/notifications" className="no-underline">
+          <Row
+            leading={<Icon name="bell" />}
+            title={t('notifications.menu')}
+            subtitle={t('notifications.menuHint')}
+          />
+        </Link>
       </div>
 
       {/* Theme */}
@@ -175,14 +228,14 @@ export default function SettingsPage() {
       </h2>
       <div className="space-y-3">
         <Row
-          leading={<span>🌙</span>}
+          leading={<Icon name="moon" />}
           title={t('settings.dark')}
           subtitle={t('settings.darkHint')}
           trailing={<Switch checked={dark} onChange={setDark} />}
         />
       </div>
 
-      {/* Sign out (queda en el área scroll) */}
+      {/* Sign out */}
       <div className="mt-6">
         <Button className="h-11 w-full rounded-xl" onClick={signOut}>
           {t('settings.signOut')}

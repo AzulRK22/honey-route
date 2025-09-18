@@ -52,7 +52,12 @@
   },
   "settings": {
     "title": "Ajustes",
-    "sections": { "account": "Cuenta", "preferences": "Preferencias", "theme": "Tema" },
+    "sections": {
+      "account": "Cuenta",
+      "preferences": "Preferencias",
+      "theme": "Tema",
+      "support": "Soporte y Legal"
+    },
     "profile": "Perfil",
     "profileHint": "Gestiona tu perfil",
     "units": "Unidades",
@@ -185,5 +190,64 @@
       "queen": "Introducción de reina realizada.",
       "pest": "Vaporización con AO."
     }
+  },
+  "help": {
+    "title": "Ayuda y FAQ",
+    "subtitle": "Preguntas frecuentes y respuestas rápidas.",
+    "more": "¿Aún necesitas ayuda? Contacta a nuestro equipo.",
+    "contact": "Contactar soporte",
+    "faq": {
+      "q1": "¿Cómo agrego un apiario nuevo?",
+      "a1": "Ve a Inicio → Nuevo apiario y completa los datos.",
+      "q2": "¿Cómo monitoreo la salud de la colmena?",
+      "a2": "Captura imágenes en Cámara y revisa el análisis.",
+      "q3": "¿Cómo exporto mis datos?",
+      "a3": "Desde Historial, usa la opción de exportar (próximamente).",
+      "q4": "¿Cómo cambio al modo oscuro?",
+      "a4": "Ajustes → Tema → activa Modo oscuro."
+    }
+  },
+  "terms": {
+    "title": "Términos y Privacidad",
+    "updated": "Última actualización: hoy",
+    "s1": {
+      "h": "1. Aceptación de términos",
+      "p": "Al usar HoneyRoute aceptas estos Términos y nuestra Política de Privacidad."
+    },
+    "s2": {
+      "h": "2. Descripción del servicio",
+      "p": "HoneyRoute ayuda a gestionar apiarios y ofrece herramientas de monitoreo."
+    },
+    "s3": {
+      "h": "3. Cuentas de usuario",
+      "p": "Mantén tu cuenta segura e infórmanos de usos no autorizados."
+    },
+    "s4": {
+      "h": "4. Privacidad",
+      "p": "Recopilamos y tratamos datos según nuestra Política de Privacidad."
+    },
+    "s5": {
+      "h": "5. Cambios",
+      "p": "Podemos actualizar estos términos; continuar usando implica aceptación."
+    }
+  },
+  "notifications": {
+    "menu": "Notificaciones",
+    "menuHint": "Elige qué recibir",
+    "title": "Notificaciones",
+    "subtitle": "Mantente al tanto de tu apiario.",
+    "inapp": "Notificaciones en la app",
+    "push": "Notificaciones push",
+    "critical": {
+      "t": "Alertas críticas",
+      "d": "Eventos de salud o riesgo que requieren atención."
+    },
+    "routine": { "t": "Recordatorios rutinarios", "d": "Mantenimiento y tareas periódicas." },
+    "updates": { "t": "Actualizaciones de la app", "d": "Novedades y mejoras." },
+    "urgent": { "t": "Alertas urgentes", "d": "Avisos inmediatos en tu dispositivo." },
+    "general": { "t": "Notificaciones generales", "d": "Actualizaciones y consejos." },
+    "enable": "Conceder permiso de push",
+    "notSupported": "Las notificaciones push no son compatibles en este dispositivo/navegador.",
+    "denied": "No se concedió el permiso."
   }
 }
