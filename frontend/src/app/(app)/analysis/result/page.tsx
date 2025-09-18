@@ -1,12 +1,6 @@
-import { redirect } from 'next/navigation';
-import { supabaseServer } from '@/lib/supabase/server';
+// frontend/src/app/(app)/analysis/result/page.tsx
 import ResultClient from './result.client';
 
-export default async function ResultPage() {
-  const supabase = await supabaseServer();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) redirect('/login');
+export default function ResultPage() {
   return <ResultClient />;
 }

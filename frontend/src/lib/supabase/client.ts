@@ -1,15 +1,54 @@
-import { createBrowserClient } from '@supabase/ssr';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// frontend/src/lib/supabase/client.ts
+// Stub sin dependencias ni variables de entorno. No falla en build si queda algún import.
 
-export function supabaseBrowser() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-  if (!url || !anon) throw new Error('SUPABASE env missing');
+type AuthApi = {
+  signOut: () => Promise<{ error: null }>;
+  signInWithPassword: (_: unknown) => Promise<{ data: null; error: Error }>;
+  getUser: () => Promise<{ data: { user: null }; error: null }>;
+};
 
-  // Sin cookies personalizadas en browser; deja los defaults
-  return createBrowserClient(url, anon, {
+type QueryBuilder = {
+  // Soporta select('id', { count: 'exact', head: true }).eq(...).single()
+  select: (
+    _?: unknown,
+    __?: unknown
+  ) => QueryBuilder & {
+    single: () => Promise<{ data: any; error: null }>;
+  };
+  eq: (_: string, __: unknown) => QueryBuilder;
+  // Soporta insert(...).select()
+  insert: (_: unknown) => {
+    select: (_?: unknown) => Promise<{ data: any; error: null }>;
+  };
+};
+
+function makeBuilder(): QueryBuilder {
+  return {
+    select: () =>
+      Object.assign(makeBuilder(), {
+        single: async () => ({ data: null, error: null }),
+      }),
+    eq: () => makeBuilder(),
+    insert: () => ({
+      select: async () => ({ data: null, error: null }),
+    }),
+  };
+}
+
+export function supabaseBrowser(): {
+  auth: AuthApi;
+  from: (_: string) => QueryBuilder;
+} {
+  return {
     auth: {
-      persistSession: true,
-      autoRefreshToken: true,
+      signOut: async () => ({ error: null }),
+      signInWithPassword: async () => ({
+        data: null,
+        error: new Error('Supabase deshabilitado (flujo local)'),
+      }),
+      getUser: async () => ({ data: { user: null }, error: null }),
     },
-  });
+    from: () => makeBuilder(),
+  };
 }

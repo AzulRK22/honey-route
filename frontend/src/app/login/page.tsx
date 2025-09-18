@@ -1,24 +1,14 @@
+//frontend/src/app/login/page.tsx
 'use client';
 
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
 import CardShell from '@/components/shell/CardShell';
 import LangToggle from '@/components/LangToggle';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { useI18n } from '@/i18n/I18nProvider';
-
-// Utilidad segura de errores (sin 'any')
-function getErrorMessage(err: unknown, fallback = 'No pudimos iniciar sesión.'): string {
-  if (err instanceof Error) return err.message;
-  if (typeof err === 'object' && err !== null && 'message' in err) {
-    const m = (err as { message?: unknown }).message;
-    if (typeof m === 'string') return m;
-  }
-  return fallback;
-}
 
 export default function LoginPage() {
   const { t } = useI18n();
@@ -28,19 +18,31 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (_e: React.FormEvent<HTMLFormElement>) => {
+    _e.preventDefault();
     setErr(null);
     if (!email || !password) {
-      setErr('Completa tus credenciales.');
+      setErr(
+        t('common.genericError') === 'common.genericError'
+          ? 'Completa tus credenciales.'
+          : t('common.genericError')
+      );
       return;
     }
     setLoading(true);
     try {
-      // 💡 Flujo local: guardamos un "token" dummy y seguimos
-      localStorage.setItem('auth.session', JSON.stringify({ email, at: Date.now() }));
-      router.push('/apiaries/new');
-      setErr(getErrorMessage(e));
+      // 🌟 Login local
+      localStorage.setItem('hr.authed', '1');
+
+      // Si ya existe apiario, ve a /hives; si no, a /apiaries/new
+      const apiary = localStorage.getItem('hr.apiary');
+      router.replace(apiary ? '/hives' : '/apiaries/new');
+    } catch {
+      setErr(
+        t('auth.notAuthenticated') === 'auth.notAuthenticated'
+          ? 'No pudimos iniciar sesión.'
+          : t('auth.notAuthenticated')
+      );
     } finally {
       setLoading(false);
     }
@@ -61,7 +63,7 @@ export default function LoginPage() {
           <span className="text-base font-semibold">HoneyRoute</span>
         </div>
       }
-      headerRight={<LangToggle />}
+      headerRight={<LangToggle esLabel="ES" />}
     >
       <div className="mx-auto max-w-xs">
         <h1 className="text-3xl font-extrabold leading-tight text-center">{t('login.title')}</h1>
@@ -95,7 +97,16 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-amber-400 font-medium">
-          <button className="underline-offset-4 hover:underline" onClick={() => router.push('/')}>
+          <button
+            className="underline-offset-4 hover:underline"
+            onClick={() => {
+              // guest: misma regla que login
+              localStorage.setItem('hr.authed', '1'); // ✅ marca sesión
+              const apiary =
+                typeof window !== 'undefined' ? localStorage.getItem('hr.apiary') : null;
+              router.push(apiary ? '/hives' : '/apiaries/new');
+            }}
+          >
             {t('login.guest')}
           </button>
         </p>

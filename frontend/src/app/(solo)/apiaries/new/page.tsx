@@ -1,3 +1,4 @@
+//frontend/src/app/(solo)/apiaries/new/page.tsx
 'use client';
 
 import { useRouter } from 'next/navigation';

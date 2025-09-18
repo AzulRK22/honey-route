@@ -1,13 +1,28 @@
-import { redirect } from 'next/navigation';
-import { supabaseServer } from '@/lib/supabase/server';
-import MapClient from './MapClient';
+// frontend/src/app/(app)/map/page.tsx
+'use client';
 
-export default async function MapPage() {
-  const supabase = await supabaseServer();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (!session) redirect('/login');
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+// Evita SSR para Leaflet/react-leaflet
+const MapClient = dynamic(() => import('./MapClient'), { ssr: false });
+
+export default function MapPage() {
+  const router = useRouter();
+  const [allowed, setAllowed] = useState(false);
+
+  useEffect(() => {
+    // Auth local: si no hay sesión, mandamos a /login
+    const authed = typeof window !== 'undefined' && localStorage.getItem('hr.authed') === '1';
+    if (!authed) {
+      router.replace('/login');
+      return;
+    }
+    setAllowed(true);
+  }, [router]);
+
+  if (!allowed) return null; // evita parpadeo
 
   return <MapClient />;
 }

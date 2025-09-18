@@ -1,3 +1,4 @@
+// frontend/src/app/(app)/analysis/upload/UploadClient.tsx
 'use client';
 
 import { useRef, useState } from 'react';

@@ -274,7 +274,6 @@ export default function CaptureClient() {
               <Image src="/images/camera.png" alt="" width={22} height={22} />
             </button>
 
-            {/* OJO: tu archivo es galery.png */}
             <IconBtn
               src="/images/gallery.png"
               label={tx(t, 'analysis.upload.title', 'Add Images')}

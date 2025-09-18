@@ -1,3 +1,4 @@
+//frontend/src/app/(app)/hives/HivesClient.tsx
 'use client';
 
 import Image from 'next/image';

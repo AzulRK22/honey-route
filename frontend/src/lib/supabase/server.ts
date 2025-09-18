@@ -1,38 +1,33 @@
-import { cookies } from 'next/headers';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// frontend/src/lib/supabase/server.ts
+// Stub en servidor para evitar lecturas de ENV y cookies.
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-if (!url || !anon) {
-  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY');
+type ServerQueryBuilder = {
+  select: (
+    _?: unknown,
+    __?: unknown
+  ) => ServerQueryBuilder & {
+    single: () => Promise<{ data: any; error: null }>;
+  };
+  eq: (_: string, __: unknown) => ServerQueryBuilder;
+};
+
+function makeServerBuilder(): ServerQueryBuilder {
+  return {
+    select: () =>
+      Object.assign(makeServerBuilder(), {
+        single: async () => ({ data: null, error: null }),
+      }),
+    eq: () => makeServerBuilder(),
+  };
 }
 
-/**
- * Cliente SSR de SOLO LECTURA:
- * - Lee cookies (get)
- * - NO escribe cookies (set/remove son NO-OP) para evitar el error de Next:
- *   "Cookies can only be modified in a Server Action or Route Handler"
- */
-export async function supabaseServer() {
-  // En tu set-up, cookies() puede ser Promise<ReadonlyRequestCookies>
-  const store = await cookies();
-
-  return createServerClient(url, anon, {
-    cookies: {
-      get(name: string): string | undefined {
-        return store.get(name)?.value;
-      },
-      set(name: string, value: string, options: CookieOptions): void {
-        // NO-OP para evitar modificación de cookies fuera de Server Action/Route Handler
-        void name;
-        void value;
-        void options;
-      },
-      remove(name: string, options: CookieOptions): void {
-        // NO-OP idem
-        void name;
-        void options;
-      },
-    },
-  });
+export async function supabaseServer(): Promise<{
+  auth: { getSession: () => Promise<{ data: { session: null } }> };
+  from: (_: string) => ServerQueryBuilder;
+}> {
+  return {
+    auth: { getSession: async () => ({ data: { session: null } }) },
+    from: () => makeServerBuilder(),
+  };
 }

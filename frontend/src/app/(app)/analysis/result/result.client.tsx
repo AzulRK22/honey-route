@@ -1,3 +1,4 @@
+//frontend/src/app/(app)/analysis/result/result.client.tsx
 'use client';
 
 import { useEffect, useState } from 'react';

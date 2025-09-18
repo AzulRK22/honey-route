@@ -97,12 +97,20 @@ export default function AlertDetailClient({ id }: { id: string }) {
   }
 
   const goToHive = () => {
-    // Usa QS que entiende el MapClient y resalta (focus)
-    router.push(
-      `/map?lat=${item.hive.lat}&lon=${item.hive.lng}&name=${encodeURIComponent(
-        item.hive.name
-      )}&focus=${encodeURIComponent(item.hive.name)}`
-    );
+    // Guarda el highlight para MapClient
+    try {
+      localStorage.setItem(
+        'map.highlight',
+        JSON.stringify({
+          hiveId: item.hive.id,
+          name: item.hive.name,
+          lat: item.hive.lat,
+          lng: item.hive.lng,
+        })
+      );
+    } catch {}
+    // También pasa hiveId por query para que MapClient resalte de inmediato
+    router.push(`/map?hiveId=${encodeURIComponent(item.hive.id)}`);
   };
 
   const resolve = () => {

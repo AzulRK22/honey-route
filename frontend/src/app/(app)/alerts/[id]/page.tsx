@@ -1,3 +1,4 @@
+//frontend/src/app/(app)/alerts/[id]/page.tsx
 import AlertDetailClient from './client';
 
 export default async function AlertDetailPage({ params }: { params: Promise<{ id: string }> }) {
