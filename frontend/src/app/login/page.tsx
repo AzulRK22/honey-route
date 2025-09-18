@@ -1,15 +1,16 @@
 'use client';
+
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+
 import CardShell from '@/components/shell/CardShell';
 import LangToggle from '@/components/LangToggle';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { useI18n } from '@/i18n/I18nProvider';
-import { supabaseBrowser } from '@/lib/supabase/client';
 
-// ✅ Utilidad para extraer mensajes de error sin usar `any`
+// Utilidad segura de errores (sin 'any')
 function getErrorMessage(err: unknown, fallback = 'No pudimos iniciar sesión.'): string {
   if (err instanceof Error) return err.message;
   if (typeof err === 'object' && err !== null && 'message' in err) {
@@ -22,12 +23,12 @@ function getErrorMessage(err: unknown, fallback = 'No pudimos iniciar sesión.')
 export default function LoginPage() {
   const { t } = useI18n();
   const router = useRouter();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErr(null);
     if (!email || !password) {
@@ -36,12 +37,10 @@ export default function LoginPage() {
     }
     setLoading(true);
     try {
-      const supabase = supabaseBrowser();
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      router.push('/');
-    } catch (err: unknown) {
-      setErr(getErrorMessage(err));
+      // 💡 Flujo local: guardamos un "token" dummy y seguimos
+      localStorage.setItem('auth.session', JSON.stringify({ email, at: Date.now() }));
+      router.push('/apiaries/new');
+      setErr(getErrorMessage(e));
     } finally {
       setLoading(false);
     }
@@ -49,7 +48,7 @@ export default function LoginPage() {
 
   return (
     <CardShell
-      heroSrc={null} // SIN imagen
+      heroSrc={null}
       headerLeft={
         <div className="flex items-center gap-2">
           <Image
@@ -57,12 +56,12 @@ export default function LoginPage() {
             width={34}
             height={34}
             alt="HoneyRoute"
-            style={{ height: 'auto' }} // si solo fijas width
+            style={{ height: 'auto' }}
           />
           <span className="text-base font-semibold">HoneyRoute</span>
         </div>
       }
-      headerRight={<LangToggle esLabel="ES" />}
+      headerRight={<LangToggle />}
     >
       <div className="mx-auto max-w-xs">
         <h1 className="text-3xl font-extrabold leading-tight text-center">{t('login.title')}</h1>
@@ -74,14 +73,14 @@ export default function LoginPage() {
             placeholder={t('login.email')}
             autoComplete="email"
             value={email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} // ✅ tipado
+            onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             type="password"
             placeholder={t('login.password')}
             autoComplete="current-password"
             value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} // ✅ tipado
+            onChange={(e) => setPassword(e.target.value)}
           />
           {err && <p className="text-sm text-red-400">{err}</p>}
           <Button type="submit" size="lg" className="w-full rounded-2xl h-12" disabled={loading}>

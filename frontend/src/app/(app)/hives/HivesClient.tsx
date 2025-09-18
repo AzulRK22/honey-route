@@ -8,7 +8,7 @@ import Button from '@/components/ui/Button';
 import CardShell from '@/components/shell/CardShell';
 import NavTab from '@/components/NavTab';
 import { useI18n } from '@/i18n/I18nProvider';
-import type { ApiaryCard } from '@/data/apiaries.server';
+import type { ApiaryCard } from './mock';
 
 function StatusBadge({ status }: { status: ApiaryCard['status'] }) {
   const { t } = useI18n();
@@ -48,9 +48,7 @@ export default function HivesClient({ cards }: { cards: ApiaryCard[] }) {
       heroSrc={null}
       headerLeft={<BrandMark />}
       headerRight={<LangToggle />}
-      // 👇 nav fijo abajo dentro del CardShell
       footer={<NavTab active="home" />}
-      // 👇 el contenido es scrollable; no hace falta gran padding inferior
       contentClassName="pb-2"
     >
       <h1 className="text-[26px] font-extrabold tracking-tight">{t('home.title')}</h1>
@@ -60,17 +58,24 @@ export default function HivesClient({ cards }: { cards: ApiaryCard[] }) {
           <button
             key={c.id}
             className="relative h-40 w-full overflow-hidden rounded-2xl text-left shadow-lg ring-1 ring-black/5 focus:outline-none focus:ring-2 focus:ring-amber-500"
-            onClick={() => router.push(`/history/${c.id}`)}
+            onClick={() => router.push(`/analysis/history?hiveId=${encodeURIComponent(c.id)}`)}
           >
-            {/* Imagen full-bleed */}
-            <Image src={c.imageUrl} alt={c.name} fill className="object-cover" />
+            {/* Fondo: imagen si hay, si no degradado elegante */}
+            {c.imageUrl ? (
+              <Image src={c.imageUrl} alt={c.name} fill className="object-cover" />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-neutral-900 to-neutral-950" />
+            )}
+
             {/* Degradado para legibilidad */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+
             {/* Badge */}
             <div className="absolute right-3 top-3">
               <StatusBadge status={c.status} />
             </div>
-            {/* Texto sobre la foto */}
+
+            {/* Texto sobre el fondo */}
             <div className="absolute bottom-3 left-4 right-4">
               <p className="text-lg font-semibold text-white drop-shadow-sm">{c.name}</p>
               <HiveCount count={c.hiveCount} />
@@ -82,7 +87,7 @@ export default function HivesClient({ cards }: { cards: ApiaryCard[] }) {
         <Button
           className="mt-2 h-12 w-full rounded-2xl"
           size="lg"
-          onClick={() => router.push('/capture')}
+          onClick={() => (window.location.href = '/capture')}
         >
           <span className="inline-flex items-center gap-2">
             <Image src="/images/camera.png" alt="" width={18} height={18} />
@@ -90,7 +95,7 @@ export default function HivesClient({ cards }: { cards: ApiaryCard[] }) {
           </span>
         </Button>
 
-        {/* Powered by (queda encima del nav fijo) */}
+        {/* Powered by */}
         <p className="mt-6 text-center text-xs text-neutral-500">
           <span className="text-neutral-400">{t('common.poweredBy')} </span>
           <span className="font-semibold tracking-wide">
