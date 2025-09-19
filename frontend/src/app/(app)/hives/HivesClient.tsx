@@ -59,7 +59,7 @@ export default function HivesClient({ cards }: { cards: ApiaryCard[] }) {
           <button
             key={c.id}
             className="relative h-40 w-full overflow-hidden rounded-2xl text-left shadow-lg ring-1 ring-black/5 focus:outline-none focus:ring-2 focus:ring-amber-500"
-            onClick={() => router.push(`/analysis/history?hiveId=${encodeURIComponent(c.id)}`)}
+            onClick={() => router.push(`/hives/${encodeURIComponent(c.id)}`)}
           >
             {/* Fondo: imagen si hay, si no degradado elegante */}
             {c.imageUrl ? (
