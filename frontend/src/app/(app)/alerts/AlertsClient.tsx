@@ -180,17 +180,13 @@ export default function AlertsClient() {
           <Chip active={typ === 'all'} onClick={() => setTyp('all')}>
             {tv(t, 'alerts.filter.all', 'All')}
           </Chip>
-          <Chip active={typ === 'temp'} onClick={() => setTyp('temp')} iconSrc={ICONS.temp}>
+          <Chip active={typ === 'temp'} onClick={() => setTyp('temp')}>
             {tv(t, 'alerts.type.temp', 'Temperature')}
           </Chip>
-          <Chip
-            active={typ === 'humidity'}
-            onClick={() => setTyp('humidity')}
-            iconSrc={ICONS.humidity}
-          >
+          <Chip active={typ === 'humidity'} onClick={() => setTyp('humidity')}>
             {tv(t, 'alerts.type.humidity', 'Humidity')}
           </Chip>
-          <Chip active={typ === 'queen'} onClick={() => setTyp('queen')} iconSrc={ICONS.queen}>
+          <Chip active={typ === 'queen'} onClick={() => setTyp('queen')}>
             {tv(t, 'alerts.type.queen', 'Queen')}
           </Chip>
         </div>
