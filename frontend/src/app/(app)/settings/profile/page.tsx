@@ -54,6 +54,10 @@ function loadProfile(): Profile {
   }
 }
 
+// helper i18n con fallback
+const tv = (t: (k: string) => string, key: string, fallback: string) =>
+  t(key) === key ? fallback : t(key);
+
 export default function ProfilePage() {
   const { t } = useI18n();
   const [profile, setProfile] = useState<Profile>(() => loadProfile());
@@ -96,72 +100,78 @@ export default function ProfilePage() {
       footer={<NavTab active="settings" />}
     >
       <h1 className="text-[26px] font-extrabold tracking-tight">
-        {t('settings.profileTitle') || 'Profile'}
+        {tv(t, 'settings.profilePage.title', 'Profile')}
       </h1>
       <p className="mt-1 text-sm text-neutral-400">
-        {t('settings.profileSubtitle') ||
-          'Update your basic information. This is stored locally for the demo.'}
+        {tv(
+          t,
+          'settings.profilePage.subtitle',
+          'Update your basic information. This is stored locally for the demo.'
+        )}
       </p>
 
       <form onSubmit={onSubmit} className="mt-4 space-y-4 max-w-sm">
         <div>
           <label className="mb-2 block text-sm text-neutral-400">
-            {t('settings.profile.name') || 'Name'}
+            {tv(t, 'settings.profilePage.name', 'Name')}
           </label>
           <Input
             value={profile.name}
             onChange={onChange('name')}
-            placeholder={t('settings.profile.namePh') || 'e.g. Ana Martínez'}
+            placeholder={tv(t, 'settings.profilePage.namePh', 'e.g. Ana Martínez')}
           />
         </div>
 
         <div>
           <label className="mb-2 block text-sm text-neutral-400">
-            {t('settings.profile.email') || 'Email'}
+            {tv(t, 'settings.profilePage.email', 'Email')}
           </label>
           <Input
             type="email"
             value={profile.email}
             onChange={onChange('email')}
-            placeholder={t('settings.profile.emailPh') || 'you@example.com'}
+            placeholder={tv(t, 'settings.profilePage.emailPh', 'you@example.com')}
           />
         </div>
 
         <div>
           <label className="mb-2 block text-sm text-neutral-400">
-            {t('settings.profile.org') || 'Organization'}
+            {tv(t, 'settings.profilePage.org', 'Organization')}
           </label>
           <Input
             value={profile.org}
             onChange={onChange('org')}
-            placeholder={t('settings.profile.orgPh') || 'Cooperative / Farm / Apiary'}
+            placeholder={tv(t, 'settings.profilePage.orgPh', 'Cooperative / Farm / Apiary')}
           />
         </div>
 
         <div>
           <label className="mb-2 block text-sm text-neutral-400">
-            {t('settings.profile.role') || 'Role'}
+            {tv(t, 'settings.profilePage.role', 'Role')}
           </label>
           <Input
             value={profile.role}
             onChange={onChange('role')}
-            placeholder={t('settings.profile.rolePh') || 'Beekeeper, technician, etc.'}
+            placeholder={tv(t, 'settings.profilePage.rolePh', 'Beekeeper, technician, etc.')}
           />
         </div>
 
         {saved && (
           <p className="text-sm text-emerald-400">
-            {t('settings.profile.saved') || 'Saved locally.'}
+            {tv(t, 'settings.profilePage.saved', 'Saved locally.')}
           </p>
         )}
 
         <Button type="submit" className="h-11 w-full rounded-xl" disabled={saving}>
-          {saving ? '...' : t('settings.profile.saveCta') || 'Save profile'}
+          {saving ? '...' : tv(t, 'settings.profilePage.saveCta', 'Save profile')}
         </Button>
 
         <p className="mt-2 text-xs text-neutral-500">
-          {t('settings.profile.localNote') ||
-            'For this demo, profile data is stored only in your browser.'}
+          {tv(
+            t,
+            'settings.profilePage.localNote',
+            'For this demo, profile data is stored only in your browser.'
+          )}
         </p>
       </form>
     </CardShell>

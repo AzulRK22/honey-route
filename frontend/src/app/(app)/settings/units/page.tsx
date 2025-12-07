@@ -42,6 +42,10 @@ function loadUnits(): Units {
   }
 }
 
+// helper i18n con fallback
+const tv = (t: (k: string) => string, key: string, fallback: string) =>
+  t(key) === key ? fallback : t(key);
+
 export default function UnitsPage() {
   const { t } = useI18n();
   const [units, setUnits] = useState<Units>(() => loadUnits());
@@ -85,21 +89,28 @@ export default function UnitsPage() {
       footer={<NavTab active="settings" />}
     >
       <h1 className="text-[26px] font-extrabold tracking-tight">
-        {t('settings.unitsTitle') || 'Units & formats'}
+        {tv(t, 'settings.unitsPage.title', 'Units & formats')}
       </h1>
       <p className="mt-1 text-sm text-neutral-400">
-        {t('settings.unitsSubtitle') ||
-          'Choose how you prefer to see temperatures, distances and weights.'}
+        {tv(
+          t,
+          'settings.unitsPage.subtitle',
+          'Choose how you prefer to see temperatures, distances and weights.'
+        )}
       </p>
 
       <form onSubmit={onSave} className="mt-4 space-y-4 max-w-sm">
         {/* Temperature */}
         <section className="rounded-2xl bg-neutral-900 p-4 ring-1 ring-black/5">
           <h2 className="text-sm font-semibold">
-            {t('settings.units.temperature') || 'Temperature'}
+            {tv(t, 'settings.unitsPage.temperature', 'Temperature')}
           </h2>
           <p className="mt-1 text-xs text-neutral-400">
-            {t('settings.units.temperatureHint') || 'Used for brood, hive and weather temperature.'}
+            {tv(
+              t,
+              'settings.unitsPage.temperatureHint',
+              'Used for brood, hive and weather temperature.'
+            )}
           </p>
           <div className="mt-3 flex gap-2">
             <button
@@ -129,9 +140,15 @@ export default function UnitsPage() {
 
         {/* Distance */}
         <section className="rounded-2xl bg-neutral-900 p-4 ring-1 ring-black/5">
-          <h2 className="text-sm font-semibold">{t('settings.units.distance') || 'Distance'}</h2>
+          <h2 className="text-sm font-semibold">
+            {tv(t, 'settings.unitsPage.distance', 'Distance')}
+          </h2>
           <p className="mt-1 text-xs text-neutral-400">
-            {t('settings.units.distanceHint') || 'For maps, forage radius and travel distance.'}
+            {tv(
+              t,
+              'settings.unitsPage.distanceHint',
+              'For maps, forage radius and travel distance.'
+            )}
           </p>
           <div className="mt-3 flex gap-2">
             <button
@@ -161,9 +178,13 @@ export default function UnitsPage() {
 
         {/* Weight */}
         <section className="rounded-2xl bg-neutral-900 p-4 ring-1 ring-black/5">
-          <h2 className="text-sm font-semibold">{t('settings.units.weight') || 'Weight'}</h2>
+          <h2 className="text-sm font-semibold">{tv(t, 'settings.unitsPage.weight', 'Weight')}</h2>
           <p className="mt-1 text-xs text-neutral-400">
-            {t('settings.units.weightHint') || 'For hive weight, harvest and feed measurements.'}
+            {tv(
+              t,
+              'settings.unitsPage.weightHint',
+              'For hive weight, harvest and feed measurements.'
+            )}
           </p>
           <div className="mt-3 flex gap-2">
             <button
@@ -193,13 +214,13 @@ export default function UnitsPage() {
 
         {saved && (
           <p className="text-sm text-emerald-400">
-            {t('settings.units.saved') || 'Preferences saved.'}
+            {tv(t, 'settings.unitsPage.saved', 'Preferences saved.')}
           </p>
         )}
 
         <div className="flex gap-2">
           <Button type="submit" className="h-11 flex-1 rounded-xl">
-            {t('settings.units.saveCta') || 'Save units'}
+            {tv(t, 'settings.unitsPage.saveCta', 'Save units')}
           </Button>
           <Button
             type="button"
@@ -207,13 +228,16 @@ export default function UnitsPage() {
             className="h-11 flex-1 rounded-xl"
             onClick={onReset}
           >
-            {t('settings.units.resetCta') || 'Reset'}
+            {tv(t, 'settings.unitsPage.resetCta', 'Reset')}
           </Button>
         </div>
 
         <p className="mt-2 text-xs text-neutral-500">
-          {t('settings.units.localNote') ||
-            'These preferences are stored in your browser and can be changed at any time.'}
+          {tv(
+            t,
+            'settings.unitsPage.localNote',
+            'These preferences are stored in your browser and can be changed at any time.'
+          )}
         </p>
       </form>
     </CardShell>

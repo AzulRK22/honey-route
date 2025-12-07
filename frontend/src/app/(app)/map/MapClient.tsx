@@ -1,4 +1,3 @@
-// frontend/src/app/(app)/map/MapClient.tsx
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -87,6 +86,18 @@ function safeParseArray<T>(raw: string | null): T[] {
   } catch {
     return [];
   }
+}
+
+// Helper para armar labels de conteo por severidad (100% i18n)
+function buildCountsLabel(
+  s: HiveAlertSummary,
+  t: (k: string, p?: Record<string, unknown>) => string
+): string {
+  const parts: string[] = [];
+  if (s.high > 0) parts.push(`${s.high} ${tv(t, 'alerts.sev.high', 'High')}`);
+  if (s.medium > 0) parts.push(`${s.medium} ${tv(t, 'alerts.sev.medium', 'Medium')}`);
+  if (s.low > 0) parts.push(`${s.low} ${tv(t, 'alerts.sev.low', 'Low')}`);
+  return parts.join(', ');
 }
 
 export default function MapClient() {
@@ -464,14 +475,6 @@ export default function MapClient() {
     return Array.from(map.values());
   }, [displayAlerts]);
 
-  const buildCountsLabel = (s: HiveAlertSummary): string => {
-    const parts: string[] = [];
-    if (s.high > 0) parts.push(`${s.high} high`);
-    if (s.medium > 0) parts.push(`${s.medium} medium`);
-    if (s.low > 0) parts.push(`${s.low} low`);
-    return parts.join(', ');
-  };
-
   const getRiskLevel = (s: HiveAlertSummary): string => {
     if (s.high > 0) return tv(t, 'alerts.sev.high', 'High');
     if (s.medium > 0) return tv(t, 'alerts.sev.medium', 'Medium');
@@ -550,7 +553,7 @@ export default function MapClient() {
             </option>
             {displayHives.map((h) => (
               <option key={h.id} value={h.id}>
-                {h.name} {h.source === 'local' ? '· (local)' : ''}
+                {h.name} {h.source === 'local' ? tv(t, 'map.tag.local', '· local') : ''}
               </option>
             ))}
           </select>
@@ -575,7 +578,7 @@ export default function MapClient() {
           {displayHives.map((h) => {
             const summary = hiveAlertSummaries.find((s) => s.hiveId === h.id) ?? null;
             const riskLabel = summary ? getRiskLevel(summary) : null;
-            const counts = summary ? buildCountsLabel(summary) : null;
+            const counts = summary ? buildCountsLabel(summary, t) : null;
 
             // Todas las alertas de este hive (para Cause / Details)
             const hiveAlerts = displayAlerts.filter((a) => a.hive.id === h.id);
@@ -599,7 +602,7 @@ export default function MapClient() {
                 <Popup>
                   <div className="min-w-[220px]">
                     <p className="font-semibold">
-                      {h.name} {h.source === 'local' ? '· (local)' : ''}
+                      {h.name} {h.source === 'local' ? tv(t, 'map.tag.local', '· local') : ''}
                     </p>
                     <p className="text-xs text-neutral-600">{h.apiaryName}</p>
                     <p className="mt-1 text-xs text-neutral-600">
@@ -758,7 +761,7 @@ export default function MapClient() {
                 >
                   <div className="min-w-0">
                     <p className="truncate font-semibold">{s.hiveName}</p>
-                    <p className="mt-0.5 text-[11px] text-neutral-400">{buildCountsLabel(s)}</p>
+                    <p className="mt-0.5 text-[11px] text-neutral-400">{buildCountsLabel(s, t)}</p>
                   </div>
                   <span className="ml-2 text-neutral-500 text-sm">›</span>
                 </button>
@@ -784,7 +787,10 @@ export default function MapClient() {
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold truncate">{g.apiaryName}</p>
                     <span className="ml-2 text-xs text-neutral-400">
-                      {g.hives.length} {g.hives.length === 1 ? 'hive' : 'hives'}
+                      {g.hives.length}{' '}
+                      {g.hives.length === 1
+                        ? tv(t, 'map.groups.hiveLabel.one', 'hive')
+                        : tv(t, 'map.groups.hiveLabel.many', 'hives')}
                     </span>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1">
@@ -809,7 +815,7 @@ export default function MapClient() {
                         }`}
                       >
                         {h.name}
-                        {h.source === 'local' ? ' · local' : ''}
+                        {h.source === 'local' ? ` ${tv(t, 'map.tag.local', '· local')}` : ''}
                       </button>
                     ))}
                   </div>

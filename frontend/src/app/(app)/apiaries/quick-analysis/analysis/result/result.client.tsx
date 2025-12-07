@@ -51,6 +51,36 @@ function severityDotClasses(sev: Severity): string {
   return 'bg-emerald-500';
 }
 
+// Traducir labels específicos de detecciones conocidas
+function translateDetectionLabel(label: string, t: (k: string) => string): string {
+  const map: Record<string, string> = {
+    'High temperature detected': tv(t, 'alerts.items.a1.title', 'High temperature detected'),
+    'Humidity out of optimal range': tv(
+      t,
+      'alerts.items.a2.title',
+      'Humidity out of optimal range'
+    ),
+    'Queen status requires attention': tv(
+      t,
+      'alerts.items.a3.title',
+      'Queen status requires attention'
+    ),
+    'Low temperature detected': tv(t, 'alerts.items.a4.title', 'Low temperature detected'),
+  };
+
+  return map[label] ?? label;
+}
+
+// Traducir fuente / origen del análisis si viene como slug
+function translateSource(source: string | null | undefined, t: (k: string) => string): string {
+  if (!source) return '';
+  if (source === 'quick-analysis') {
+    // Reusamos el título de Quick Analysis
+    return tv(t, 'quickAnalysis.title', 'Quick Analysis');
+  }
+  return source;
+}
+
 export default function ResultClient() {
   const { t } = useI18n();
   const router = useRouter();
@@ -59,6 +89,16 @@ export default function ResultClient() {
   const [meta, setMeta] = useState<AnalysisMeta | null>(null);
   const [mediaCount, setMediaCount] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
+
+  // Mapa de status → label traducido
+  const statusLabelMap: Record<StoredResult['status'], string> = {
+    queued: tv(t, 'analysis.result.status.queued', 'Queued'),
+    running: tv(t, 'analysis.result.status.running', 'Running'),
+    done: tv(t, 'analysis.result.status.done', 'Done'),
+    error: tv(t, 'analysis.result.status.error', 'Error'),
+  };
+
+  const statusLabel = statusLabelMap[result?.status || 'queued'];
 
   // cargar desde sessionStorage
   useEffect(() => {
@@ -186,7 +226,6 @@ export default function ResultClient() {
   const handleGoToHiveOnMap = () => {
     if (!meta?.hiveId) return;
     try {
-      // Solo guardamos ID (y opcionalmente nombre)
       localStorage.setItem(
         'map.highlight',
         JSON.stringify({
@@ -199,6 +238,10 @@ export default function ResultClient() {
     }
     router.push('/map');
   };
+
+  const hiveLabelText = tv(t, 'analysis.result.hiveLabel', 'Hive');
+  const apiaryLabelText = tv(t, 'analysis.result.apiaryLabel', 'Apiary');
+  const sourceDisplay = translateSource(meta?.source, t);
 
   return (
     <CardShell
@@ -227,7 +270,7 @@ export default function ResultClient() {
           <Button
             className="h-11 w-full rounded-2xl"
             size="lg"
-            onClick={() => router.replace('/quick-analysis')}
+            onClick={() => router.replace('/apiaries/quick-analysis')}
           >
             {tv(t, 'analysis.loading.backToQuick', 'Go to Quick Analysis')}
           </Button>
@@ -265,8 +308,8 @@ export default function ResultClient() {
 
                 <p className="mt-3 text-xs text-neutral-400">
                   {summaryText}
-                  {meta?.hiveLabel ? ` · Hive: ${meta.hiveLabel}` : ''}
-                  {meta?.apiaryName ? ` · Apiary: ${meta.apiaryName}` : ''}
+                  {meta?.hiveLabel ? ` · ${hiveLabelText}: ${meta.hiveLabel}` : ''}
+                  {meta?.apiaryName ? ` · ${apiaryLabelText}: ${meta.apiaryName}` : ''}
                 </p>
 
                 {/* small chips */}
@@ -277,9 +320,9 @@ export default function ResultClient() {
                     <span className={`h-2 w-2 rounded-full ${severityDotClasses(result.risk)}`} />
                     {tv(t, 'analysis.result.riskChip', 'Overall hive risk')}
                   </span>
-                  {meta?.source && (
+                  {sourceDisplay && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-neutral-900/80 px-2 py-1 text-neutral-300 ring-1 ring-black/40">
-                      {tv(t, 'analysis.result.sourceChip', 'Source')}: {meta.source}
+                      {tv(t, 'analysis.result.sourceChip', 'Source')}: {sourceDisplay}
                     </span>
                   )}
                 </div>
@@ -298,27 +341,22 @@ export default function ResultClient() {
             </p>
             <p className="text-sm">
               <span className="font-semibold">{tv(t, 'analysis.result.status', 'Status')}:</span>{' '}
-              {result.status}
+              {statusLabel}
               {typeof result.progress === 'number' ? ` (${result.progress}%)` : ''}
             </p>
-
             {meta?.hiveLabel && (
               <p className="mt-1 text-sm">
-                <span className="font-semibold">{tv(t, 'analysis.result.hiveLabel', 'Hive')}:</span>{' '}
-                {meta.hiveLabel}
+                <span className="font-semibold">{hiveLabelText}:</span> {meta.hiveLabel}
               </p>
             )}
             {meta?.apiaryName && (
               <p className="text-sm">
-                <span className="font-semibold">
-                  {tv(t, 'analysis.result.apiaryLabel', 'Apiary')}:
-                </span>{' '}
-                {meta.apiaryName}
+                <span className="font-semibold">{apiaryLabelText}:</span> {meta.apiaryName}
               </p>
             )}
           </div>
 
-          {/* Detections */}
+          {/* Detecciones */}
           <div className="rounded-2xl bg-neutral-900 p-4 text-sm text-neutral-100 ring-1 ring-black/5">
             <p className="text-xs uppercase tracking-wide text-neutral-400">
               {tv(t, 'analysis.result.detectionsTitle', 'Detections')}
@@ -333,26 +371,31 @@ export default function ResultClient() {
               </p>
             ) : (
               <ul className="mt-3 space-y-2 text-sm">
-                {result.detections.map((d, idx) => (
-                  <li
-                    key={`${d.label}-${idx}`}
-                    className="flex items-center justify-between rounded-xl bg-black/40 px-3 py-2 text-sm"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`h-2.5 w-2.5 rounded-full ${severityDotClasses(d.severity)}`}
-                      />
-                      <span>{d.label}</span>
-                    </div>
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[11px] uppercase ${severityPillClasses(
-                        d.severity
-                      )}`}
+                {result.detections.map((d, idx) => {
+                  const sevLabel = tv(t, `alerts.sev.${d.severity}`, d.severity);
+                  const labelTranslated = translateDetectionLabel(d.label, t);
+
+                  return (
+                    <li
+                      key={`${d.label}-${idx}`}
+                      className="flex items-center justify-between rounded-xl bg-black/40 px-3 py-2 text-sm"
                     >
-                      {d.severity}
-                    </span>
-                  </li>
-                ))}
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`h-2.5 w-2.5 rounded-full ${severityDotClasses(d.severity)}`}
+                        />
+                        <span>{labelTranslated}</span>
+                      </div>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[11px] uppercase ${severityPillClasses(
+                          d.severity
+                        )}`}
+                      >
+                        {sevLabel}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
