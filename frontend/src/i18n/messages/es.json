@@ -166,7 +166,67 @@
     "darkHint": "Cambiar al tema oscuro",
     "en": "EN",
     "es": "ES",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "subscriptions": "Suscripciones",
+    "subscriptionsHint": "Elige o cambia tu plan",
+    "subs": {
+      "title": "Suscripciones",
+      "hint": "Elige o cambia tu plan",
+      "page": {
+        "title": "Suscripciones",
+        "subtitle": "Elige un plan. Puedes cambiar cuando quieras."
+      },
+      "price": {
+        "free": "$0",
+        "pro": "$9",
+        "team": "$29"
+      },
+      "perMonth": "/mes",
+      "plan": {
+        "hobby": {
+          "name": "Hobby",
+          "tag": "Para uso personal y aprendizaje"
+        },
+        "pro": {
+          "name": "Pro",
+          "tag": "Ideal para apicultores activos"
+        },
+        "team": {
+          "name": "Equipo",
+          "tag": "Para equipos y cooperativas"
+        }
+      },
+      "features": {
+        "images": "Imágenes",
+        "storage": "Almacenamiento",
+        "alerts": "Alertas",
+        "offline": "Modo sin conexión",
+        "mapLayers": "Capas del mapa",
+        "multiUser": "Miembros del equipo",
+        "images.val": {
+          "hobby": "50/mes",
+          "pro": "500/mes",
+          "team": "5k/mes"
+        },
+        "storage.val": {
+          "hobby": "1 GB",
+          "pro": "10 GB",
+          "team": "100 GB"
+        },
+        "alerts.val": {
+          "hobby": "Básicas",
+          "pro": "Inteligentes",
+          "team": "Avanzadas"
+        },
+        "offline.val": "Sí",
+        "mapLayers.val": "Floral y riesgo",
+        "multiUser.val": "Hasta 10"
+      },
+      "recommended": "Recomendado",
+      "current": "Plan actual",
+      "select": "Elegir plan",
+      "disclaimer": "Precios de demostración. Facturación próximamente."
+    }
   },
   "home": {
     "title": "Mis apiarios",
@@ -175,8 +235,11 @@
     "newApiary": "Nuevo apiario",
     "empty": "Aún no tienes apiarios. ¡Crea el primero!",
     "hivesCount": "{{count}} colmenas",
+    "quickAnalysis": "Análisis rápido",
+    "tutorial": "Tutorial",
     "status": {
       "healthy": "Saludable",
+      "warning": "Advertencia",
       "attention": "Requiere atención",
       "critical": "Crítico"
     },
@@ -184,6 +247,7 @@
       "home": "Inicio",
       "alerts": "Alertas",
       "map": "Mapa",
+      "analytics": "Analítica",
       "settings": "Ajustes"
     }
   },

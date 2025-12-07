@@ -166,7 +166,67 @@
     "darkHint": "Switch to dark theme",
     "en": "EN",
     "es": "ES",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "subscriptions": "Subscriptions",
+    "subscriptionsHint": "Pick or change your plan",
+    "subs": {
+      "title": "Subscriptions",
+      "hint": "Pick or change your plan",
+      "page": {
+        "title": "Subscriptions",
+        "subtitle": "Pick a plan. You can change anytime."
+      },
+      "price": {
+        "free": "$0",
+        "pro": "$9",
+        "team": "$29"
+      },
+      "perMonth": "/mo",
+      "plan": {
+        "hobby": {
+          "name": "Hobby",
+          "tag": "For personal use and learning"
+        },
+        "pro": {
+          "name": "Pro",
+          "tag": "Best for active beekeepers"
+        },
+        "team": {
+          "name": "Team",
+          "tag": "For teams and cooperatives"
+        }
+      },
+      "features": {
+        "images": "Images",
+        "storage": "Storage",
+        "alerts": "Alerts",
+        "offline": "Offline Mode",
+        "mapLayers": "Map Layers",
+        "multiUser": "Team members",
+        "images.val": {
+          "hobby": "50/mo",
+          "pro": "500/mo",
+          "team": "5k/mo"
+        },
+        "storage.val": {
+          "hobby": "1 GB",
+          "pro": "10 GB",
+          "team": "100 GB"
+        },
+        "alerts.val": {
+          "hobby": "Basic",
+          "pro": "Smart",
+          "team": "Advanced"
+        },
+        "offline.val": "Yes",
+        "mapLayers.val": "Floral & risk",
+        "multiUser.val": "Up to 10"
+      },
+      "recommended": "Recommended",
+      "current": "Current plan",
+      "select": "Choose plan",
+      "disclaimer": "Prices shown are demo only. Billing coming soon."
+    }
   },
   "home": {
     "title": "My Apiaries",
@@ -175,8 +235,11 @@
     "newApiary": "New Apiary",
     "empty": "No apiaries yet. Create your first one!",
     "hivesCount": "{{count}} hives",
+    "quickAnalysis": "Quick Analysis",
+    "tutorial": "Tutorial",
     "status": {
       "healthy": "Healthy",
+      "warning": "Warning",
       "attention": "Needs Attention",
       "critical": "Critical"
     },
@@ -184,6 +247,7 @@
       "home": "Home",
       "alerts": "Alerts",
       "map": "Map",
+      "analytics": "Analytics",
       "settings": "Settings"
     }
   },
